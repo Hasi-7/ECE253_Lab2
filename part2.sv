@@ -52,9 +52,19 @@ module mux2to1(input logic x, input logic y, input logic s,output logic m);
 	logic S_Not;
 	logic X_S_Not_Out;
 	
-	v7408 G1 (.pin1(s), .pin2(y), .pin3(Sy_Out));
-	v7404 G2 (.pin1(s), .pin2(S_Not));
-	G1 (.pin4(S_Not), .pin5(x), .pin6(X_S_Not_Out));
-	v7432 G4 (.pin1(Sy_Out), .pin2(X_S_Not_Out), .pin3(m));
+	v7408 G1 (
+        .pin1(s), 
+        .pin2(y), 
+        .pin3(Sy_Out),
+        .pin4(S_Not), 
+        .pin5(x), 
+        .pin6(X_S_Not_Out));
+	
+	v7404 G2 (.pin1(s), 
+			  .pin2(S_Not));
+	
+	v7432 G4 (.pin1(Sy_Out), 
+			  .pin2(X_S_Not_Out), 
+			  .pin3(m));
 
 endmodule
