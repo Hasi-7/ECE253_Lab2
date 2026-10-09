@@ -5,16 +5,6 @@
 
 // LEDR[0] output display
 
-module mux(input logic [9:0] SW, output logic[9:0] LEDR);
-    mux2to1 u0(
-        .x(SW[0]),
-        .y(SW[1]),
-        .s(SW[9]),
-        .m(LEDR[0])
-        );
-endmodule
-
-
 module v7404(input logic pin1, pin3, pin5, pin9, pin11, pin13,
 	         output logic pin2, pin4, pin6, pin8, pin10, pin12);
 
@@ -27,8 +17,10 @@ module v7404(input logic pin1, pin3, pin5, pin9, pin11, pin13,
 
 endmodule
 
-module v7432 (input logic pin1, pin2, pin4, pin5, pin13, pin12, pin10, pin9,
-	         output logic pin3, pin6, pin11, pin8);
+module v7432 (input logic pin1, output logic pin3, input logic pin5, 
+input logic pin9, output logic pin11, input logic pin13, input logic pin2, 
+input logic pin4, output logic pin6, output logic pin8, input logic pin10, 
+input logic pin12);
 
 	assign pin3 = pin1 | pin2;
 	assign pin6 = pin4 | pin5;
@@ -37,8 +29,11 @@ module v7432 (input logic pin1, pin2, pin4, pin5, pin13, pin12, pin10, pin9,
 
 endmodule
 
-module v7408 (input logic pin1, pin2, pin4, pin5, pin13, pin12, pin10, pin9,
-	          output logic pin3, pin6, pin11, pin8);
+module v7408 (input logic pin1, output logic pin3, 
+input logic pin5, input logic pin9, output logic pin11, 
+input logic pin13, input logic pin2, input logic pin4, 
+output logic pin6, output logic pin8, input logic pin10, 
+input logic pin12);
 
 	assign pin3 = pin1 & pin2;
 	assign pin6 = pin4 & pin5;
@@ -52,18 +47,14 @@ module mux2to1(input logic x, input logic y, input logic s,output logic m);
     // y: select 1
     // s: select signal
     //m: output
-  
-    //assign m = s & y | ~s & x;
-    // OR
+
 	logic Sy_Out;
 	logic S_Not;
 	logic X_S_Not_Out;
 	
 	v7408 G1 (.pin1(s), .pin2(y), .pin3(Sy_Out));
 	v7404 G2 (.pin1(s), .pin2(S_Not));
-	v7408 G3 (.pin4(S_Not), .pin5(x), .pin6(X_S_Not_Out));
+	G1 (.pin4(S_Not), .pin5(x), .pin6(X_S_Not_Out));
 	v7432 G4 (.pin1(Sy_Out), .pin2(X_S_Not_Out), .pin3(m));
-	
-	//assign m = s ? y : x;
 
 endmodule
